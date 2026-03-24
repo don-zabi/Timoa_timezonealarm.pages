@@ -1,0 +1,207 @@
+<!DOCTYPE html>
+<html lang="ja" data-lang="ja">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>お問い合わせ | Timoa - 時差アラーム</title>
+  <style>
+    body {
+      margin: 0;
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", "Hiragino Kaku Gothic ProN",
+        "Hiragino Sans", "Yu Gothic", Meiryo, sans-serif;
+      background: #f7f7f7;
+      color: #222;
+    }
+
+    .container {
+      max-width: 680px;
+      margin: 0 auto;
+      padding: 40px 20px;
+    }
+
+    .card {
+      background: #fff;
+      border-radius: 12px;
+      padding: 24px;
+      box-shadow: 0 6px 20px rgba(0, 0, 0, 0.06);
+    }
+
+    .lang-switch {
+      display: flex;
+      justify-content: flex-end;
+      gap: 8px;
+      margin-bottom: 14px;
+    }
+
+    .lang-btn {
+      border: 1px solid #c9c9c9;
+      border-radius: 999px;
+      padding: 6px 12px;
+      background: #fff;
+      color: #444;
+      font: inherit;
+      cursor: pointer;
+    }
+
+    .lang-btn.is-active {
+      background: #1a73e8;
+      border-color: #1a73e8;
+      color: #fff;
+    }
+
+    h1 {
+      margin-top: 0;
+      margin-bottom: 20px;
+      font-size: 1.8rem;
+    }
+
+    p {
+      margin-top: 0;
+      margin-bottom: 16px;
+    }
+
+    label {
+      display: block;
+      margin-bottom: 6px;
+      font-weight: 600;
+    }
+
+    input,
+    textarea {
+      width: 100%;
+      box-sizing: border-box;
+      margin-bottom: 14px;
+      padding: 10px;
+      border: 1px solid #ccc;
+      border-radius: 8px;
+      font: inherit;
+    }
+
+    .submit-btn {
+      border: 0;
+      border-radius: 8px;
+      padding: 10px 14px;
+      background: #1a73e8;
+      color: #fff;
+      font: inherit;
+      cursor: pointer;
+    }
+
+    a {
+      color: #1a73e8;
+      word-break: break-all;
+    }
+
+    .lang-content {
+      display: none;
+    }
+
+    html[data-lang="ja"] .lang-ja,
+    html[data-lang="en"] .lang-en {
+      display: block;
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <div class="card">
+      <div class="lang-switch" role="group" aria-label="Language switcher">
+        <button class="lang-btn" type="button" data-lang-btn="ja" aria-pressed="true">日本語</button>
+        <button class="lang-btn" type="button" data-lang-btn="en" aria-pressed="false">English</button>
+      </div>
+
+      <section class="lang-content lang-ja">
+        <h1>お問い合わせ</h1>
+        <p>以下フォーム送信時にメールアプリが起動します。</p>
+
+        <form action="mailto:contact.nodf+anbery.Timoa@gmail.com" method="post" enctype="text/plain">
+          <label for="name-ja">お名前</label>
+          <input id="name-ja" name="name" type="text" required />
+
+          <label for="email-ja">メールアドレス</label>
+          <input id="email-ja" name="email" type="email" required />
+
+          <label for="message-ja">お問い合わせ内容</label>
+          <textarea id="message-ja" name="message" rows="6" required></textarea>
+
+          <button class="submit-btn" type="submit">送信</button>
+        </form>
+
+        <p>
+          連絡先：
+          <a href="mailto:contact.nodf+anbery.Timoa@gmail.com">[contact.nodf+anbery.Timoa@gmail.com]</a>
+        </p>
+      </section>
+
+      <section class="lang-content lang-en">
+        <h1>Contact Us</h1>
+        <p>Your email app will open when you submit this form.</p>
+
+        <form action="mailto:contact.nodf+anbery.Timoa@gmail.com" method="post" enctype="text/plain">
+          <label for="name-en">Name</label>
+          <input id="name-en" name="name" type="text" required />
+
+          <label for="email-en">Email Address</label>
+          <input id="email-en" name="email" type="email" required />
+
+          <label for="message-en">Message</label>
+          <textarea id="message-en" name="message" rows="6" required></textarea>
+
+          <button class="submit-btn" type="submit">Send</button>
+        </form>
+
+        <p>
+          Contact:
+          <a href="mailto:contact.nodf+anbery.Timoa@gmail.com">[contact.nodf+anbery.Timoa@gmail.com]</a>
+        </p>
+      </section>
+    </div>
+  </div>
+
+  <script>
+    (function () {
+      var key = "timoa-preferred-language";
+      var html = document.documentElement;
+      var buttons = document.querySelectorAll("[data-lang-btn]");
+      var pageTitle = {
+        ja: "お問い合わせ | Timoa - 時差アラーム",
+        en: "Contact | Timoa - Time Difference Alarm"
+      };
+
+      function setLanguage(lang) {
+        var selected = lang === "en" ? "en" : "ja";
+        html.setAttribute("data-lang", selected);
+        html.setAttribute("lang", selected);
+        document.title = pageTitle[selected];
+        buttons.forEach(function (button) {
+          var isActive = button.getAttribute("data-lang-btn") === selected;
+          button.classList.toggle("is-active", isActive);
+          button.setAttribute("aria-pressed", String(isActive));
+        });
+        try {
+          localStorage.setItem(key, selected);
+        } catch (e) {
+          // Do nothing if localStorage is unavailable.
+        }
+      }
+
+      var initialLanguage = "ja";
+      try {
+        var stored = localStorage.getItem(key);
+        if (stored === "ja" || stored === "en") {
+          initialLanguage = stored;
+        }
+      } catch (e) {
+        // Keep default language.
+      }
+
+      setLanguage(initialLanguage);
+      buttons.forEach(function (button) {
+        button.addEventListener("click", function () {
+          setLanguage(button.getAttribute("data-lang-btn"));
+        });
+      });
+    })();
+  </script>
+</body>
+</html>
